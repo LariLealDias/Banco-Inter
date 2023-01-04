@@ -26,13 +26,6 @@ namespace BancoInter
         static int idConfiguration;
         static string[] argsMain;
 
-        //Função introdutoria
-      
-          
-        //static void CheckWelcome()
-        //{
-           
-        //}
 
         //Funções do Admin
         static void ShowOptionsAdmin()
@@ -72,16 +65,18 @@ namespace BancoInter
 
         static void ErrorMessageInput()
         {
+            Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.WriteLine(" XXXXX Parece que você informou um valor não válido XXXXX");
+            Console.ResetColor();
         }
-        
+
         static void GeneateID()
         {
             do
             {
                 if (titulares.Count == 0)
                 {
-                    Console.ForegroundColor = ConsoleColor.Magenta;
+                    Console.ForegroundColor = ConsoleColor.Cyan;
                     Console.WriteLine(" ---- Antes de prosseguir, escolha uma configuração: ");
                     Console.WriteLine("     (1) Gerar ID randomico");
                     Console.WriteLine("     (2) Gerar ID sequencial");
@@ -113,76 +108,74 @@ namespace BancoInter
                 else 
                 {
                     Console.WriteLine();
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.WriteLine("   -- Informe uma opção válida --");
-                    Console.ResetColor();
+                    ErrorMessageInput();
                     Console.WriteLine();
-
                 }
             } while (idConfiguration != 1 && idConfiguration != 2);
-           
         }
+
         static void CreateNewUser()
         {
             Console.WriteLine();
             GeneateID();
             Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.ForegroundColor = ConsoleColor.Cyan;
 
             Console.WriteLine(" ----- Para criar um novo usuário, digite a seguir as informações pedidas ----- ");
-                Console.Write("Digite o nome do titular:      ");
-                Console.ResetColor();
-                string titular = Console.ReadLine();
-                titulares.Add(titular);
+            Console.Write("Digite o nome do titular:      ");
+            Console.ResetColor();
+            string titular = Console.ReadLine();
+            titulares.Add(titular);
 
-                Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.Write("Digite apenas numeros do CPF:  ");
-                Console.ResetColor();
-                string cpf = Console.ReadLine();
-                cpfs.Add(cpf);
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write("Digite apenas numeros do CPF:  ");
+            Console.ResetColor();
+            string cpf = Console.ReadLine();
+            cpfs.Add(cpf);
 
-                Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.Write("Digite o telefone:   +55  11  9");
-                Console.ResetColor();
-                string telefone = Console.ReadLine();
-                telefones.Add(telefone);
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write("Digite o telefone:   +55  11  9");
+            Console.ResetColor();
+            string telefone = Console.ReadLine();
+            telefones.Add(telefone);
 
-                Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.Write("Digite o saldo inicial:      R$");
-                Console.ResetColor();
-                double saldoInicial = double.Parse(Console.ReadLine());
-                saldo.Add(saldoInicial);
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write("Digite o saldo inicial:      R$");
+            Console.ResetColor();
+            double saldoInicial = double.Parse(Console.ReadLine());
+            saldo.Add(saldoInicial);
 
-                Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.Write("Deseja confirmar o cadastro? (s/n) ");
-                Console.ResetColor();
-                string confirmacao = Console.ReadLine().ToLower();
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write("Deseja confirmar o cadastro? (s/n) ");
+            Console.ResetColor();
+            string confirmacao = Console.ReadLine().ToLower();
 
-                Console.ForegroundColor = ConsoleColor.Magenta;
-                if (confirmacao == "n")
-                {
-                    titulares.RemoveAt(titulares.Count - 1);
-                    cpfs.RemoveAt(cpfs.Count - 1);
-                    telefones.RemoveAt(telefones.Count - 1);
-                    saldo.RemoveAt(saldo.Count - 1);
-                    ids.RemoveAt(ids.Count - 1);
-                    Console.WriteLine("Cadastro cancelado.");
-                    Console.WriteLine();
-                    Console.WriteLine();
-                }
-                else
-                {
-                    Console.WriteLine();
-                    Console.WriteLine("Usuário cadastrado com sucesso!");
-                    Console.WriteLine();
-                    Console.WriteLine();
-                }
-                Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            if (confirmacao == "s")
+            {
+                Console.WriteLine();
+                Console.WriteLine("Usuário cadastrado com sucesso!");
+                Console.WriteLine();
+                Console.WriteLine();
+            }
+            else
+            {
+                titulares.RemoveAt(titulares.Count - 1);
+                cpfs.RemoveAt(cpfs.Count - 1);
+                telefones.RemoveAt(telefones.Count - 1);
+                saldo.RemoveAt(saldo.Count - 1);
+                ids.RemoveAt(ids.Count - 1);
+                Console.WriteLine();
+                Console.WriteLine("Cadastro cancelado.");
+                Console.WriteLine();
+                Console.WriteLine();
+            }
+            Console.ResetColor();
         }
 
         static void DeleteUser()
         {
-            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.ForegroundColor = ConsoleColor.Magenta;
 
             Console.Write("Insira o CPF: ");
             string CPFtoDelete = Console.ReadLine();
@@ -203,9 +196,11 @@ namespace BancoInter
 
                 Console.WriteLine();
                 Console.WriteLine("Usuário deletado com sucesso!");
+                Console.WriteLine();
+                Console.WriteLine();
+
             }
             Console.ResetColor();
-
         }
 
         static void ShowAllUser()
@@ -219,13 +214,10 @@ namespace BancoInter
 
             for (int i = 0; i < indexOfList; i++)
             {
-                Console.WriteLine($"               {titulares[i]}");
+                Console.WriteLine($"             > {titulares[i]}");
                 Console.WriteLine($"               {cpfs[i]}");
-                Console.WriteLine($"               {telefones[i]}");
-                Console.WriteLine($"               {saldo[i]}");
                 Console.WriteLine($"               {ids[i]}");
                 Console.WriteLine("+--+--+--+--+--+--+--+--+--+--+--+--+--+--+");
-
             }
             Console.ResetColor();
         }
@@ -251,7 +243,6 @@ namespace BancoInter
                 Console.WriteLine("     Saldo: " + saldo[indexToFind].ToString("C"));
                 Console.WriteLine("     ID: " + ids[indexToFind]);
 
-
                 Console.ResetColor();
             }
         }
@@ -259,13 +250,15 @@ namespace BancoInter
         static void AllValueStored()
         {
             Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine();
 
+            Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine($"Total armazenado no banco: R${saldo.Sum():F2}");
 
             Console.WriteLine();
-            Console.ResetColor();
+            Console.WriteLine();
 
+            Console.ResetColor();
         }
 
         static string messageOptionCheckingAccount()
@@ -284,73 +277,72 @@ namespace BancoInter
             {
                 option = 0;
                 return checkLogin;
-
             } 
             return "n";
         }
+
         static void showIntroBankToAdmin()
         {
 
             string checkLogin = "n";
-                Console.Write(" Informe a senha: ");
-                adminKey = 123;
-                getAdminKey = int.Parse(Console.ReadLine());
-                if (getAdminKey == adminKey)
-                {
-                    Console.WriteLine($" {name}, você tem autorização às seguintes ações ");
-                    Console.WriteLine();
+            Console.Write(" Informe a senha: ");
+            adminKey = 123;
+            getAdminKey = int.Parse(Console.ReadLine());
+            if (getAdminKey == adminKey)
+            {
+               Console.WriteLine($" {name}, você tem autorização às seguintes ações ");
+               Console.WriteLine();
 
-                    do
-                    {
-                        ShowOptionsAdmin();
-                        option = int.Parse(Console.ReadLine());
+               do
+               {
+                  ShowOptionsAdmin();
+                  option = int.Parse(Console.ReadLine());
 
-                        switch (option)
-                        {
-                            case 1:
-                                CreateNewUser();
-                                break;
-                            case 2:
-                                DeleteUser();
-                                break;
-                            case 3:
-                                ShowAllUser();
-                                break;
-                            case 4:
-                                ShowInfosUser();
-                                break;
-                            case 5:
-                                AllValueStored();
-                                break;
-                            case 6:
-                                checkLogin = messageOptionCheckingAccount();
-                                break;
-                            default: Console.WriteLine("Opção inválida, tente novamente");
-                                break;
-                        }
-                    } while (option != 0);
-                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    Console.WriteLine("=-=-=-=-=-=-=-=-=-=-=-=-=- Programa de admin encerrado =-=-=-=-=-=-=-=-=-=-=-=-=-");
-                    Console.ResetColor();
+                  switch (option)
+                  {
+                     case 1:
+                       CreateNewUser();
+                       break;
+                     case 2:
+                        DeleteUser();
+                        break;
+                     case 3:
+                        ShowAllUser();
+                        break;
+                     case 4:
+                        ShowInfosUser();
+                        break;
+                     case 5:
+                         AllValueStored();
+                         break;
+                     case 6:
+                         checkLogin = messageOptionCheckingAccount();
+                         break;
+                     default: Console.WriteLine("Opção inválida, tente novamente");
+                         break;
+                  }
+               } while (option != 0);
+               Console.ForegroundColor = ConsoleColor.DarkYellow;
+               Console.WriteLine("=-=-=-=-=-=-=-=-=-=-=-=-=- Programa de admin encerrado =-=-=-=-=-=-=-=-=-=-=-=-=-");
+               Console.ResetColor();
 
-                    if(checkLogin == "s")
-                    {
-                         Main(argsMain);
-                    }
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Algo deu errado, certifique que a senha esteja correta");
-                    Console.ResetColor();
+               if(checkLogin == "s")
+               {
+                  Main(argsMain);
+               }
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Algo deu errado, certifique que a senha esteja correta");
+                Console.ResetColor();
 
-                    showIntroBankToAdmin();
-                }
+                showIntroBankToAdmin();
+            }
         }
 
 
         //Funções do User
-       
         static void ShowOptionsUser()
         {
             do
@@ -359,19 +351,21 @@ namespace BancoInter
                 Console.WriteLine("-----------------------------------------------------------------");
                 Console.ResetColor();
 
-                Console.BackgroundColor = ConsoleColor.DarkGreen;
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
                 Console.WriteLine("  1 - Sacar  ");
                 Console.ResetColor();
 
-                Console.BackgroundColor = ConsoleColor.DarkMagenta;
+                Console.ForegroundColor = ConsoleColor.DarkMagenta;
                 Console.WriteLine("  2 - Depositar  ");
                 Console.ResetColor();
 
-                Console.BackgroundColor = ConsoleColor.DarkCyan;
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
                 Console.WriteLine("  3 - Transferir  ");
                 Console.ResetColor();
 
                 Console.WriteLine("  0 - Encerrar programa   ");
+                Console.WriteLine();
+                Console.Write("Digite a alternativa desejada: ");
                 optionToCheckingAccount = int.Parse(Console.ReadLine());
 
                 switch (optionToCheckingAccount)
@@ -392,17 +386,24 @@ namespace BancoInter
 
         static void Withdraw()
         {
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.Write("Insira seu CPF para prosseguir a ação: ");
+            Console.ResetColor();
             string CPFWithdraw = Console.ReadLine();
 
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
             int indexToFind = cpfs.IndexOf(CPFWithdraw);
             if (indexToFind == -1)
             {
+                Console.WriteLine();
                 Console.WriteLine("CPF inválido.");
+                Console.WriteLine();
+                Console.WriteLine();
             }
             else
             {
                 Console.Write("Informe o valor: R$");
+                Console.ResetColor();
                 double valueToWithdraw = double.Parse(Console.ReadLine());
                 string tryAgainOrNot;
 
@@ -410,19 +411,24 @@ namespace BancoInter
                 {
                     if (valueToWithdraw > saldo[indexToFind])
                     {
+                        Console.ForegroundColor = ConsoleColor.DarkGreen;
                         Console.WriteLine("Parece que você não tem saldo o sulficiente");
                         Console.WriteLine("Gostaria de tentar outro valor? (s/n) ");
+                        Console.ResetColor();
                         tryAgainOrNot = Console.ReadLine();
                     }
                     else
                     {
                         saldo[indexToFind] -= valueToWithdraw;
+                        Console.ForegroundColor = ConsoleColor.DarkGreen;
                         Console.WriteLine($"Sacado com sucesso, agora o saldo atual é: {saldo[indexToFind]:F2}");
                         tryAgainOrNot = "n";
                     }
+
                     if (tryAgainOrNot == "s")
                     {
                         Console.Write("Informe o valor: ");
+                        Console.ResetColor();
                         valueToWithdraw = double.Parse(Console.ReadLine().ToLower());
                     }
                     else
@@ -435,17 +441,25 @@ namespace BancoInter
 
         static void Deposit()
         {
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
             Console.Write("Insira seu CPF para processeguir a ação: ");
+            Console.ResetColor();
             string CPFDeposit = Console.ReadLine();
 
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
             int indexToFind = cpfs.IndexOf(CPFDeposit);
             if (indexToFind == -1)
             {
+                Console.WriteLine();
                 Console.WriteLine("CPF inválido.");
+                Console.WriteLine();
+                Console.WriteLine();
             }
             else
             {
                 Console.Write("Informe o valor: R$");
+                Console.ResetColor();
+
                 double valueToDeposit = double.Parse(Console.ReadLine());
                 string tryAgainOrNot;
 
@@ -453,19 +467,25 @@ namespace BancoInter
                 {
                     if (valueToDeposit > saldo[indexToFind])
                     {
+                        Console.ForegroundColor = ConsoleColor.DarkMagenta;
                         Console.WriteLine("Parece que você não tem saldo o sulficiente");
                         Console.WriteLine("Gostaria de tentar outro valor? (s/n) ");
+                        Console.ResetColor();
+
                         tryAgainOrNot = Console.ReadLine();
                     }
                     else
                     {
                         saldo[indexToFind] += valueToDeposit;
+                        Console.ForegroundColor = ConsoleColor.DarkMagenta;
                         Console.WriteLine($"Depositado com sucesso, agora o saldo atual é: {saldo[indexToFind]:F2}");
                         tryAgainOrNot = "n";
                     }
                     if (tryAgainOrNot == "s")
                     {
                         Console.Write("Informe o valor: R$");
+                        Console.ResetColor();
+
                         valueToDeposit = double.Parse(Console.ReadLine().ToLower());
                     }
                     else
@@ -478,24 +498,36 @@ namespace BancoInter
 
         static void Transfer()
         {
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.Write("Insira seu CPF para prosseguir a ação: ");
+            Console.ResetColor();
+
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
             string CPFTransferUser1 = Console.ReadLine();
             int indexUser1 = cpfs.IndexOf(CPFTransferUser1);
             if (indexUser1 == -1)
             {
+                Console.WriteLine();
                 Console.WriteLine("CPF inválido.");
+                Console.WriteLine();
+                Console.WriteLine();
             }
             else
             {
                 Console.Write("Insira o CPF do destinatário: ");
+                Console.ResetColor();
+
                 string CPFTransferUser2 = Console.ReadLine();
                 int indexUser2 = cpfs.IndexOf(CPFTransferUser2);
                 if (indexUser2 == -1)
                 {
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
                     Console.WriteLine("Usuario não localizado");
                 }
 
                 Console.Write("Informe o valor: R$");
+                Console.ResetColor();
+
                 double valueToTransfer = double.Parse(Console.ReadLine());
                 string tryAgainOrNot;
 
@@ -503,14 +535,18 @@ namespace BancoInter
                 {
                     if (valueToTransfer > saldo[indexUser1])
                     {
+                        Console.ForegroundColor = ConsoleColor.DarkCyan;
                         Console.WriteLine("Parece que você não tem saldo o sulficiente");
                         Console.WriteLine("Gostaria de tentar outro valor? (s/n) ");
+                        Console.ResetColor();
+
                         tryAgainOrNot = Console.ReadLine().ToLower();
                     }
                     else
                     {
                         saldo[indexUser1] -= valueToTransfer;
                         saldo[indexUser2] += valueToTransfer;
+                        Console.ForegroundColor = ConsoleColor.DarkCyan;
                         Console.WriteLine($"Transferido com sucesso, agora o seu saldo atual é: R${saldo[indexUser1]:F2}");
                         Console.WriteLine($"E o saldo atual de {titulares[indexUser2]} é: R${saldo[indexUser2]:F2}");
                         tryAgainOrNot = "n";
@@ -518,6 +554,8 @@ namespace BancoInter
                     if (tryAgainOrNot == "s")
                     {
                         Console.Write("Informe o valor: R$");
+                        Console.ResetColor();
+
                         valueToTransfer = double.Parse(Console.ReadLine());
                     }
                     else
@@ -527,13 +565,12 @@ namespace BancoInter
                 }
             }
         }
+
         static void showIntroBankToUser()
         {
             do
             {
-                
                 Console.Write(" Informe a senha: ");
-
                 clientKey = 123;
                 getClientKey = int.Parse(Console.ReadLine());
 
@@ -551,10 +588,9 @@ namespace BancoInter
                 else
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Algo deu errado, certifique que a senha esteja correta: ");
+                    Console.WriteLine("Algo deu errado, certifique que a senha esteja correta ");
                     Console.ResetColor();
                 }
-
             } while (getClientKey != clientKey);
         }
 
@@ -574,9 +610,6 @@ namespace BancoInter
             name = Console.ReadLine();
             Console.ResetColor();
 
-            
-
-            
             Console.Write($" Bem vindo ao BANCO INTER {name}, você é: Admin ou cliente? ");
             Console.ForegroundColor = ConsoleColor.Green;
             role = Console.ReadLine().ToLower();
@@ -598,11 +631,6 @@ namespace BancoInter
                 
                 Main(args);
             }
-
-
-
-
-
         }
     }
 }
