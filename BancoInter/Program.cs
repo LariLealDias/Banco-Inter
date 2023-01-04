@@ -1,8 +1,10 @@
 ﻿using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
+using System.Xml.Linq;
 
-namespace MenuExample
+namespace BancoInter
 {
     class Program
     {
@@ -10,10 +12,27 @@ namespace MenuExample
         static List<string> cpfs = new List<string>();
         static List<string> telefones = new List<string>();
         static List<double> saldo = new List<double>();
+        static List<string> ids = new List<string>();
+
         static int option;
         static int optionToCheckingAccount;
+        static string name;
+        static string role;
+        static int clientKey;
+        static int getClientKey;
+        static int adminKey;
+        static int getAdminKey;
+        static int count = 1;
+        static int idConfiguration;
+        static string[] argsMain;
 
-
+        //Função introdutoria
+      
+          
+        //static void CheckWelcome()
+        //{
+           
+        //}
 
         //Funções do Admin
         static void ShowOptionsAdmin()
@@ -38,12 +57,12 @@ namespace MenuExample
             Console.WriteLine("4 - Detalhes do usuário");
             Console.ResetColor();
 
-            Console.ForegroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("5 - Total disponível no banco");
             Console.ResetColor();
 
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("6 - Conta corrente do usuário");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("6 - Conta corrente do usuário -- disponivel apenas ao cliente");
             Console.ResetColor();
 
             Console.WriteLine("0 - Sair do programa");
@@ -55,45 +74,110 @@ namespace MenuExample
         {
             Console.WriteLine(" XXXXX Parece que você informou um valor não válido XXXXX");
         }
+        
+        static void GeneateID()
+        {
+            do
+            {
+                if (titulares.Count == 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Magenta;
+                    Console.WriteLine(" ---- Antes de prosseguir, escolha uma configuração: ");
+                    Console.WriteLine("     (1) Gerar ID randomico");
+                    Console.WriteLine("     (2) Gerar ID sequencial");
+                    Console.Write("Digite o número da opção: ");
+                    Console.ResetColor();
 
+                    idConfiguration = int.Parse(Console.ReadLine());
+                }
+                if (idConfiguration == 1)
+                {
+                    var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                    var stringChars = new char[8];
+                    var random = new Random();
+
+                    for (int i = 0; i < stringChars.Length; i++)
+                    {
+                        stringChars[i] = chars[random.Next(chars.Length)];
+                    }
+
+                    var finalString = new String(stringChars);
+                    ids.Add(finalString);
+                }
+                else if (idConfiguration == 2)
+                {
+                    string sequential = Convert.ToString(count++);
+
+                    ids.Add(sequential);
+                }
+                else 
+                {
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.WriteLine("   -- Informe uma opção válida --");
+                    Console.ResetColor();
+                    Console.WriteLine();
+
+                }
+            } while (idConfiguration != 1 && idConfiguration != 2);
+           
+        }
         static void CreateNewUser()
         {
+            Console.WriteLine();
+            GeneateID();
+            Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Magenta;
 
-            Console.Write("Digite o nome do titular:      ");
-            string titular = Console.ReadLine();
-            titulares.Add(titular);
+            Console.WriteLine(" ----- Para criar um novo usuário, digite a seguir as informações pedidas ----- ");
+                Console.Write("Digite o nome do titular:      ");
+                Console.ResetColor();
+                string titular = Console.ReadLine();
+                titulares.Add(titular);
 
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write("Digite apenas numeros do CPF:  ");
+                Console.ResetColor();
+                string cpf = Console.ReadLine();
+                cpfs.Add(cpf);
 
-            Console.Write("Digite apenas numeros do CPF:  ");
-            string cpf = Console.ReadLine();
-            cpfs.Add(cpf);
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write("Digite o telefone:   +55  11  9");
+                Console.ResetColor();
+                string telefone = Console.ReadLine();
+                telefones.Add(telefone);
 
-            Console.Write("Digite o telefone:   +55  11  9");
-            string telefone = Console.ReadLine();
-            telefones.Add(telefone);
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write("Digite o saldo inicial:      R$");
+                Console.ResetColor();
+                double saldoInicial = double.Parse(Console.ReadLine());
+                saldo.Add(saldoInicial);
 
-            Console.Write("Digite o saldo inicial:      R$");
-            double saldoInicial = double.Parse(Console.ReadLine());
-            saldo.Add(saldoInicial);
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write("Deseja confirmar o cadastro? (s/n) ");
+                Console.ResetColor();
+                string confirmacao = Console.ReadLine().ToLower();
 
-            Console.Write("Deseja confirmar o cadastro? (s/n) ");
-            string confirmacao = Console.ReadLine().ToLower();
-
-            if (confirmacao == "n")
-            {
-                titulares.RemoveAt(titulares.Count - 1);
-                cpfs.RemoveAt(cpfs.Count - 1);
-                telefones.RemoveAt(telefones.Count - 1);
-                saldo.RemoveAt(saldo.Count - 1);
-                Console.WriteLine("Cadastro cancelado.");
-            }
-            Console.WriteLine();
-            Console.WriteLine("Usuário cadastrado com sucesso!");
-            Console.WriteLine();
-            Console.WriteLine();
-
-            Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                if (confirmacao == "n")
+                {
+                    titulares.RemoveAt(titulares.Count - 1);
+                    cpfs.RemoveAt(cpfs.Count - 1);
+                    telefones.RemoveAt(telefones.Count - 1);
+                    saldo.RemoveAt(saldo.Count - 1);
+                    ids.RemoveAt(ids.Count - 1);
+                    Console.WriteLine("Cadastro cancelado.");
+                    Console.WriteLine();
+                    Console.WriteLine();
+                }
+                else
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Usuário cadastrado com sucesso!");
+                    Console.WriteLine();
+                    Console.WriteLine();
+                }
+                Console.ResetColor();
         }
 
         static void DeleteUser()
@@ -126,19 +210,21 @@ namespace MenuExample
 
         static void ShowAllUser()
         {
+            Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.DarkGreen;
 
             int indexOfList = titulares.Count();
             Console.WriteLine($"Total de contas registradas no sistema: {indexOfList} ");
-            Console.WriteLine("+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+");
+            Console.WriteLine("+--+--+--+--+--+--+--+--+--+--+--+--+--+--+");
 
             for (int i = 0; i < indexOfList; i++)
             {
-                Console.WriteLine($"     {titulares[i]}");
-                Console.WriteLine($"     {cpfs[i]}");
-                Console.WriteLine($"     {telefones[i]}");
-                Console.WriteLine($"     {saldo[i]}");
-                Console.WriteLine("+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+");
+                Console.WriteLine($"               {titulares[i]}");
+                Console.WriteLine($"               {cpfs[i]}");
+                Console.WriteLine($"               {telefones[i]}");
+                Console.WriteLine($"               {saldo[i]}");
+                Console.WriteLine($"               {ids[i]}");
+                Console.WriteLine("+--+--+--+--+--+--+--+--+--+--+--+--+--+--+");
 
             }
             Console.ResetColor();
@@ -163,6 +249,8 @@ namespace MenuExample
                 Console.WriteLine("     CPF: " + cpfs[indexToFind]);
                 Console.WriteLine("     Telefone: " + telefones[indexToFind]);
                 Console.WriteLine("     Saldo: " + saldo[indexToFind].ToString("C"));
+                Console.WriteLine("     ID: " + ids[indexToFind]);
+
 
                 Console.ResetColor();
             }
@@ -171,7 +259,7 @@ namespace MenuExample
         static void AllValueStored()
         {
             Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.Blue;
 
             Console.WriteLine($"Total armazenado no banco: R${saldo.Sum():F2}");
 
@@ -180,8 +268,89 @@ namespace MenuExample
 
         }
 
+        static string messageOptionCheckingAccount()
+        {
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("               ------------------ATENÇÃO------------------");
+            Console.ResetColor();
+            Console.WriteLine("  --          Essa ação esta disponivel apenas para clientes           -- ");
+            Console.WriteLine(" --   caso queira utilizar essa função, logue novamente como cliente     -- ");
+            Console.Write(" --                       logar novamente? (s/n):   ");
+
+            string checkLogin = Console.ReadLine();
+
+            if(checkLogin == "s")
+            {
+                option = 0;
+                return checkLogin;
+
+            } 
+            return "n";
+        }
+        static void showIntroBankToAdmin()
+        {
+
+            string checkLogin = "n";
+                Console.Write(" Informe a senha: ");
+                adminKey = 123;
+                getAdminKey = int.Parse(Console.ReadLine());
+                if (getAdminKey == adminKey)
+                {
+                    Console.WriteLine($" {name}, você tem autorização às seguintes ações ");
+                    Console.WriteLine();
+
+                    do
+                    {
+                        ShowOptionsAdmin();
+                        option = int.Parse(Console.ReadLine());
+
+                        switch (option)
+                        {
+                            case 1:
+                                CreateNewUser();
+                                break;
+                            case 2:
+                                DeleteUser();
+                                break;
+                            case 3:
+                                ShowAllUser();
+                                break;
+                            case 4:
+                                ShowInfosUser();
+                                break;
+                            case 5:
+                                AllValueStored();
+                                break;
+                            case 6:
+                                checkLogin = messageOptionCheckingAccount();
+                                break;
+                            default: Console.WriteLine("Opção inválida, tente novamente");
+                                break;
+                        }
+                    } while (option != 0);
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.WriteLine("=-=-=-=-=-=-=-=-=-=-=-=-=- Programa de admin encerrado =-=-=-=-=-=-=-=-=-=-=-=-=-");
+                    Console.ResetColor();
+
+                    if(checkLogin == "s")
+                    {
+                         Main(argsMain);
+                    }
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Algo deu errado, certifique que a senha esteja correta");
+                    Console.ResetColor();
+
+                    showIntroBankToAdmin();
+                }
+        }
+
 
         //Funções do User
+       
         static void ShowOptionsUser()
         {
             do
@@ -358,55 +527,82 @@ namespace MenuExample
                 }
             }
         }
+        static void showIntroBankToUser()
+        {
+            do
+            {
+                
+                Console.Write(" Informe a senha: ");
 
+                clientKey = 123;
+                getClientKey = int.Parse(Console.ReadLine());
+
+                if (getClientKey == clientKey)
+                {
+                    Console.WriteLine($" {name}, você tem autorização às seguintes ações");
+                    Console.WriteLine();
+
+                        ShowOptionsUser();
+
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.WriteLine("=-=-=-=-=-=-=-=-=-=-=-=-=- Programa encerrado =-=-=-=-=-=-=-=-=-=-=-=-=-");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Algo deu errado, certifique que a senha esteja correta: ");
+                    Console.ResetColor();
+                }
+
+            } while (getClientKey != clientKey);
+        }
 
 
         //Função principal
         static void Main(string[] args)
         {
+            argsMain = args;
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine("=-=-=-=-=-=-=-=-=-=-=-=-=- BANCO INTER =-=-=-=-=-=-=-=-=-=-=-=-=-");
+            Console.WriteLine("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- BANCO INTER =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
             Console.ResetColor();
             Console.WriteLine();
 
-            Console.Write("Olá, informe como gostaria de ser chamado: ");
-            string name = Console.ReadLine();
+            Console.Write(" Olá, informe como gostaria de ser chamado(a): ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            name = Console.ReadLine();
+            Console.ResetColor();
 
-            Console.WriteLine($"Bem vindo ao BANCO INTER {name}, a seguir escolha uma opção");
+            
+
+            
+            Console.Write($" Bem vindo ao BANCO INTER {name}, você é: Admin ou cliente? ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            role = Console.ReadLine().ToLower();
+            Console.ResetColor();
             Console.WriteLine();
 
-            do
+            if (role == "admin")
             {
-                ShowOptionsAdmin();
-                option = int.Parse(Console.ReadLine());
+                showIntroBankToAdmin();
+            }
+            else if (role == "cliente")
+            {
+                showIntroBankToUser();
+            }
+            else if (role != "cliente" || role != "admin")
+            {
+                Console.WriteLine("Algo deu errado, certifique que esta escrevendo corretamente");
+                Console.Write("admin ou cliente : ");
+                
+                Main(args);
+            }
 
-                switch (option)
-                {
-                    case 1:
-                        CreateNewUser();
-                        break;
-                    case 2:
-                        DeleteUser();
-                        break;
-                    case 3:
-                        ShowAllUser();
-                        break;
-                    case 4:
-                        ShowInfosUser();
-                        break;
-                    case 5:
-                        AllValueStored();
-                        break;
-                    case 6:
-                        ShowOptionsUser();
-                        break;
 
-                }
-            } while (option != 0);
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine("=-=-=-=-=-=-=-=-=-=-=-=-=- Programa encerrado =-=-=-=-=-=-=-=-=-=-=-=-=-");
-            Console.ResetColor();
+
+
+
         }
     }
 }
