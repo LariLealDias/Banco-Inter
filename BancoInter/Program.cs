@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
 namespace BancoInter
@@ -34,11 +35,11 @@ namespace BancoInter
             Console.WriteLine("-----------------------------------------------------------------");
             Console.ResetColor();
 
-            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("1 - Cadastrar um novo usuário");
             Console.ResetColor();
 
-            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine("2 - Deletar um usuário");
             Console.ResetColor();
 
@@ -65,9 +66,11 @@ namespace BancoInter
 
         static void ErrorMessageInput()
         {
+            Console.WriteLine(  );
             Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.WriteLine(" XXXXX Parece que você informou um valor não válido XXXXX");
             Console.ResetColor();
+            Console.WriteLine();
         }
 
         static void GeneateID()
@@ -120,30 +123,82 @@ namespace BancoInter
             GeneateID();
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Cyan;
-
             Console.WriteLine(" ----- Para criar um novo usuário, digite a seguir as informações pedidas ----- ");
-            Console.Write("Digite o nome do titular:      ");
             Console.ResetColor();
-            string titular = Console.ReadLine();
-            titulares.Add(titular);
 
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.Write("Digite apenas numeros do CPF:  ");
-            Console.ResetColor();
-            string cpf = Console.ReadLine();
-            cpfs.Add(cpf);
+            while (true)
+            {
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write("Digite o nome do titular:      ");
+                Console.ResetColor();
+                string titular = Console.ReadLine();
+                bool stringValidation = Regex.IsMatch(titular, @"^[ a-zA-Z á]*$");
+                if (stringValidation)
+                {
+                    titulares.Add(titular);
+                    break;
+                }
+                else
+                {
+                    ErrorMessageInput();
+                }
+            }
 
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.Write("Digite o telefone:   +55  11  9");
-            Console.ResetColor();
-            string telefone = Console.ReadLine();
-            telefones.Add(telefone);
+            while (true)
+            {
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write("Digite o CPF:                  ");
+                Console.ResetColor();
+                string cpf = Console.ReadLine();
+                bool numberValidation = Regex.IsMatch(cpf, "^[0-9]+$");
+                if (numberValidation && cpf.Length == 11)
+                {
+                    cpfs.Add(cpf);
+                    break;
+                }
+                else
+                {
+                    ErrorMessageInput();
+                }
+            }
 
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.Write("Digite o saldo inicial:      R$");
-            Console.ResetColor();
-            double saldoInicial = double.Parse(Console.ReadLine());
-            saldo.Add(saldoInicial);
+            while (true)
+            {
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write("Digite o telefone:   +55  11  9");
+                Console.ResetColor();
+                string telefone = Console.ReadLine();
+                bool numberValidation = Regex.IsMatch(telefone, "^[0-9]+$");
+                if(numberValidation && telefone.Length == 8)
+                {
+                    telefones.Add(telefone);
+                    break;
+                }
+                else
+                {
+                    ErrorMessageInput();
+                }
+            }
+
+            while (true)
+            {
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write("Digite o saldo inicial:      R$");
+                Console.ResetColor();
+                string saldoInicial = Console.ReadLine();
+                bool numberValidation = Regex.IsMatch(saldoInicial, "^[A-Za-z0-9]*\\d+[A-Za-z0-9]*$");
+                if (numberValidation)
+                {
+                    double saldoConvert = Convert.ToDouble(saldoInicial);
+                    saldo.Add(saldoConvert);
+                    break;
+                }
+                else
+                {
+                    ErrorMessageInput();
+                }
+            }
+
 
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.Write("Deseja confirmar o cadastro? (s/n) ");
@@ -203,7 +258,7 @@ namespace BancoInter
             Console.ResetColor();
         }
 
-        static void ShowAllUser()
+        static void ShowAllUsers()
         {
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.DarkGreen;
@@ -214,9 +269,9 @@ namespace BancoInter
 
             for (int i = 0; i < indexOfList; i++)
             {
-                Console.WriteLine($"             > {titulares[i]}");
-                Console.WriteLine($"               {cpfs[i]}");
-                Console.WriteLine($"               {ids[i]}");
+                Console.WriteLine($"             > Nome: {titulares[i]}");
+                Console.WriteLine($"               CPF:  {cpfs[i]}");
+                Console.WriteLine($"               ID:   {ids[i]}");
                 Console.WriteLine("+--+--+--+--+--+--+--+--+--+--+--+--+--+--+");
             }
             Console.ResetColor();
@@ -230,20 +285,26 @@ namespace BancoInter
             string cpf = Console.ReadLine();
 
             int indexToFind = cpfs.IndexOf(cpf);
-            if (indexToFind == -1)
+            while (true)
             {
-                Console.WriteLine("CPF inválido");
-            }
-            else
-            {
-                Console.WriteLine();
-                Console.WriteLine("     Titular: " + titulares[indexToFind]);
-                Console.WriteLine("     CPF: " + cpfs[indexToFind]);
-                Console.WriteLine("     Telefone: " + telefones[indexToFind]);
-                Console.WriteLine("     Saldo: " + saldo[indexToFind].ToString("C"));
-                Console.WriteLine("     ID: " + ids[indexToFind]);
+                if (indexToFind == -1)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("CPF inválido");
+                    Console.WriteLine();
+                }
+                else
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("     Titular: " + titulares[indexToFind]);
+                    Console.WriteLine("     CPF: " + cpfs[indexToFind]);
+                    Console.WriteLine("     Telefone: " + telefones[indexToFind]);
+                    Console.WriteLine("     Saldo: " + saldo[indexToFind].ToString("C"));
+                    Console.WriteLine("     ID: " + ids[indexToFind]);
 
-                Console.ResetColor();
+                    Console.ResetColor();
+                    break;
+                }
             }
         }
 
@@ -307,7 +368,7 @@ namespace BancoInter
                         DeleteUser();
                         break;
                      case 3:
-                        ShowAllUser();
+                        ShowAllUsers();
                         break;
                      case 4:
                         ShowInfosUser();
@@ -363,6 +424,10 @@ namespace BancoInter
                 Console.WriteLine("  3 - Transferir  ");
                 Console.ResetColor();
 
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
+                Console.WriteLine("  4 - Saber meu saldo");
+                Console.ResetColor();
+
                 Console.WriteLine("  0 - Encerrar programa   ");
                 Console.WriteLine();
                 Console.Write("Digite a alternativa desejada: ");
@@ -378,6 +443,9 @@ namespace BancoInter
                         break;
                     case 3:
                         Transfer();
+                        break;
+                    case 4:
+                        ShowBankBalance();
                         break;
                 }
             } while (optionToCheckingAccount != 0);
@@ -413,7 +481,7 @@ namespace BancoInter
                     {
                         Console.ForegroundColor = ConsoleColor.DarkGreen;
                         Console.WriteLine("Parece que você não tem saldo o sulficiente");
-                        Console.WriteLine("Gostaria de tentar outro valor? (s/n) ");
+                        Console.Write("Gostaria de tentar outro valor? (s/n) ");
                         Console.ResetColor();
                         tryAgainOrNot = Console.ReadLine();
                     }
@@ -427,7 +495,7 @@ namespace BancoInter
 
                     if (tryAgainOrNot == "s")
                     {
-                        Console.Write("Informe o valor: ");
+                        Console.Write("Informe o valor: R$");
                         Console.ResetColor();
                         valueToWithdraw = double.Parse(Console.ReadLine().ToLower());
                     }
@@ -446,53 +514,27 @@ namespace BancoInter
             Console.ResetColor();
             string CPFDeposit = Console.ReadLine();
 
-            Console.ForegroundColor = ConsoleColor.DarkMagenta;
             int indexToFind = cpfs.IndexOf(CPFDeposit);
             if (indexToFind == -1)
             {
+                Console.ForegroundColor = ConsoleColor.DarkMagenta;
                 Console.WriteLine();
                 Console.WriteLine("CPF inválido.");
                 Console.WriteLine();
                 Console.WriteLine();
+                Console.ResetColor();
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.DarkMagenta;
                 Console.Write("Informe o valor: R$");
-                Console.ResetColor();
 
                 double valueToDeposit = double.Parse(Console.ReadLine());
                 string tryAgainOrNot;
 
-                while (true)
-                {
-                    if (valueToDeposit > saldo[indexToFind])
-                    {
-                        Console.ForegroundColor = ConsoleColor.DarkMagenta;
-                        Console.WriteLine("Parece que você não tem saldo o sulficiente");
-                        Console.WriteLine("Gostaria de tentar outro valor? (s/n) ");
-                        Console.ResetColor();
-
-                        tryAgainOrNot = Console.ReadLine();
-                    }
-                    else
-                    {
-                        saldo[indexToFind] += valueToDeposit;
-                        Console.ForegroundColor = ConsoleColor.DarkMagenta;
-                        Console.WriteLine($"Depositado com sucesso, agora o saldo atual é: {saldo[indexToFind]:F2}");
-                        tryAgainOrNot = "n";
-                    }
-                    if (tryAgainOrNot == "s")
-                    {
-                        Console.Write("Informe o valor: R$");
-                        Console.ResetColor();
-
-                        valueToDeposit = double.Parse(Console.ReadLine().ToLower());
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
+                saldo[indexToFind] += valueToDeposit;
+                Console.WriteLine($"Depositado com sucesso, agora o saldo atual é: {saldo[indexToFind]:F2}");
+                Console.ResetColor();
             }
         }
 
@@ -514,17 +556,26 @@ namespace BancoInter
             }
             else
             {
-                Console.Write("Insira o CPF do destinatário: ");
-                Console.ResetColor();
-
-                string CPFTransferUser2 = Console.ReadLine();
-                int indexUser2 = cpfs.IndexOf(CPFTransferUser2);
-                if (indexUser2 == -1)
+                string CPFTransferUser2;
+                int indexUser2;
+                while (true)
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkCyan;
-                    Console.WriteLine("Usuario não localizado");
-                }
+                    Console.Write("Insira o CPF do destinatário: ");
+                    Console.ResetColor();
 
+                    CPFTransferUser2 = Console.ReadLine();
+                     indexUser2 = cpfs.IndexOf(CPFTransferUser2);
+                    if (indexUser2 == -1)
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkCyan;
+                        Console.WriteLine("Usuario não localizado");
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
                 Console.Write("Informe o valor: R$");
                 Console.ResetColor();
 
@@ -537,7 +588,7 @@ namespace BancoInter
                     {
                         Console.ForegroundColor = ConsoleColor.DarkCyan;
                         Console.WriteLine("Parece que você não tem saldo o sulficiente");
-                        Console.WriteLine("Gostaria de tentar outro valor? (s/n) ");
+                        Console.Write("Gostaria de tentar outro valor? (s/n) ");
                         Console.ResetColor();
 
                         tryAgainOrNot = Console.ReadLine().ToLower();
@@ -548,7 +599,6 @@ namespace BancoInter
                         saldo[indexUser2] += valueToTransfer;
                         Console.ForegroundColor = ConsoleColor.DarkCyan;
                         Console.WriteLine($"Transferido com sucesso, agora o seu saldo atual é: R${saldo[indexUser1]:F2}");
-                        Console.WriteLine($"E o saldo atual de {titulares[indexUser2]} é: R${saldo[indexUser2]:F2}");
                         tryAgainOrNot = "n";
                     }
                     if (tryAgainOrNot == "s")
@@ -566,8 +616,30 @@ namespace BancoInter
             }
         }
 
+        static void ShowBankBalance()
+        {
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+            Console.Write("Insira seu CPF para processeguir a ação: ");
+            string CPFToBankBalance = Console.ReadLine();
+
+            int indexToFind = cpfs.IndexOf(CPFToBankBalance);
+            if (indexToFind == -1)
+            {
+                Console.WriteLine();
+                Console.WriteLine("CPF inválido.");
+                Console.WriteLine();
+                Console.WriteLine();
+            }
+            else
+            {
+                Console.WriteLine($"saldo atual de {titulares[indexToFind]} é: {saldo[indexToFind]:F2}");
+            }
+            Console.ResetColor();
+        }
+
         static void showIntroBankToUser()
         {
+
             do
             {
                 Console.Write(" Informe a senha: ");
@@ -626,9 +698,8 @@ namespace BancoInter
             }
             else if (role != "cliente" || role != "admin")
             {
-                Console.WriteLine("Algo deu errado, certifique que esta escrevendo corretamente");
-                Console.Write("admin ou cliente : ");
-                
+                Console.WriteLine("Algo deu errado, certifique que esta escrevendo corretamente ADMIN ou CLIENTE");
+
                 Main(args);
             }
         }
