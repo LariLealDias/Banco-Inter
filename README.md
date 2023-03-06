@@ -3,7 +3,7 @@ Programa simulador de banco interativo pelo console
 <br><br>
 
 ## ⚙️ STATUS ⚙️
-![Badge](https://img.shields.io/badge/STATUS-desenvolvendo-%237159c1?style=for-the-badge&logo=ghost)
+![Badge](https://img.shields.io/badge/status-%20finished-brightgreen)
 
 <br><br>
 ![image](https://user-images.githubusercontent.com/108475403/208705043-11c5dfc0-d033-4823-b4a6-8929d2e9d133.png)
